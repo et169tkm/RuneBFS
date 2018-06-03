@@ -69,10 +69,17 @@ define(['jquery', 'underscore', 'backbone', 'data', 'ui', 'nouislider', 'LZStrin
             //$('.rune[data-name*="' + text + '"]').popover('show');
             var list = $('.rune[data-name="' + text + '"]').not('.rune-not-available');
             if (list.length > 10) {
+                var nextColorIndex;
+                for(nextColorIndex = 0; nextColorIndex < 3; nextColorIndex++) {
+                    if ($('.rune-matches-criteria-'+nextColorIndex).length == 0) {
+                        break;
+                    }
+                }
+                console.log("nextColorIndex: " + nextColorIndex);
                 $.each(list, function(i, runeElement) {
                     var runeElementJ = $(runeElement);
                     if (!runeElementJ.hasClass('rune-saved') && !runeElementJ.hasClass('rune-checked')) {
-                        runeElementJ.addClass('rune-matches-criteria');
+                        runeElementJ.addClass('rune-matches-criteria-'+nextColorIndex);
                     }
                 });
             }
@@ -93,7 +100,9 @@ define(['jquery', 'underscore', 'backbone', 'data', 'ui', 'nouislider', 'LZStrin
         });
         $('#btnClear').click(function () {
             $('[data-toggle="popover"]').popover('hide');
-            $('.rune.rune-matches-criteria').removeClass('rune-matches-criteria');
+            for(var i = 0; i < 4; i++) {
+                $('.rune.rune-matches-criteria-'+i).removeClass('rune-matches-criteria-'+i);
+            }
         });
 
         $('#btnSaveImage').click(function () {
@@ -115,7 +124,10 @@ define(['jquery', 'underscore', 'backbone', 'data', 'ui', 'nouislider', 'LZStrin
                     var $rune = $("#rune" + o);
                     $rune.data('status', 0)
                         .removeClass('rune-checked')
-                        .removeClass('rune-matches-criteria');
+                        .removeClass('rune-matches-criteria-0')
+                        .removeClass('rune-matches-criteria-1')
+                        .removeClass('rune-matches-criteria-2')
+                        .removeClass('rune-matches-criteria-3');
                 });
                 runeCheckList = [];
 
